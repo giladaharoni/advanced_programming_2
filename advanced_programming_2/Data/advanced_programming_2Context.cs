@@ -15,5 +15,11 @@ namespace advanced_programming_2.Data
         }
 
         public DbSet<advanced_programming_2.Models.rating>? rating { get; set; }
+
+        public DbSet<advanced_programming_2.Models.chathistory>? chathistory { get; set; }
+
+        public DbSet<advanced_programming_2.Models.message>? message { get; set; }
+
+        public DbSet<advanced_programming_2.Models.Contact>? Contact { get; set; }
     }
 }

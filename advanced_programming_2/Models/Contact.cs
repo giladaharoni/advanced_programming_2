@@ -3,7 +3,7 @@
     public class Contact
     {
         public int Id { get; set; }
-        public List<Contact>? Contacts { get; set; }
+        public virtual ICollection<Contact>? Contacts { get; set; }
         public string profileImage { get; set; }
 
         public DateTime? LastSeen { get; set; }
@@ -14,7 +14,7 @@
 
         public string nickname { get; set; }
 
-        public ICollection<chathistory> chathistories { get; set; }
+        public virtual ICollection<chathistory> chathistories { get; set; }
 
 
     }

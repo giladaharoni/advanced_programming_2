@@ -8,8 +8,6 @@
 
         public string content { get; set; }
 
-        public Contact sender { get; set; }
-
-        public Contact reciever { get; set; }
+        public bool isOneSend { get; set; }
     }
 }

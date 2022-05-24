@@ -4,10 +4,10 @@
     {
         public int Id { get; set; }
         //היסטוריית שיחות – הודעות, 2 אנשי קשר.
-        public ICollection<message> messages { get; set; }
+        public ICollection<message> Messages { get; set; }
 
-        public Contact contact1 { get; set; }
+        public List<Contact> Contacts { get; set; }
 
-        public Contact Contact2 { get; set; }
+        
     }
 }
