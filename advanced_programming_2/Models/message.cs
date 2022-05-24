@@ -3,6 +3,7 @@
     public class message
     {
         //שעה, תוכן, מי שלח, מי קיבל.
+        public int Id { get; set; }
         public DateTime sendTime { get; set; }
 
         public string content { get; set; }

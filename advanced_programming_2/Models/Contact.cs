@@ -2,6 +2,7 @@
 {
     public class Contact
     {
+        public int Id { get; set; }
         public List<Contact>? Contacts { get; set; }
         public string profileImage { get; set; }
 
@@ -13,7 +14,7 @@
 
         public string nickname { get; set; }
 
-        public List<chathistory> chathistories { get; set; }
+        public ICollection<chathistory> chathistories { get; set; }
 
 
     }
