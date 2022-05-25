@@ -27,9 +27,7 @@ namespace advanced_programming_2.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-              return _context.Contact != null ? 
-                          Json(await _context.Contact.ToListAsync() ):
-                          Problem("Entity set 'advanced_programming_2Context.Contact'  is null.");
+            return Json(await _context.Contact.ToListAsync());
         }
 
         [HttpGet("{id}")]
