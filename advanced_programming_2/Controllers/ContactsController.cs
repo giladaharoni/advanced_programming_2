@@ -27,14 +27,14 @@ namespace advanced_programming_2.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return Json(await _context.Contact.ToListAsync());
+                return Json(await _context.Contact.ToListAsync());
         }
 
         [HttpGet("{id}")]
         // GET: Contacts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Contact == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -46,7 +46,7 @@ namespace advanced_programming_2.Controllers
                 return NotFound();
             }
 
-            return Json(contact);
+            return View(contact);
         }
 
         // GET: Contacts/Create

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using advanced_programming_2.Models;
+using Domain;
 
-namespace advanced_programming_2.Data
+namespace Repository
 {
     public class advanced_programming_2Context : DbContext
     {

@@ -18,7 +18,7 @@
 async function post() {
     const r = await fetch('../api/Contacts',
         { method: 'POST', 
-        headers: { 'Content-type': 'application/json' }, 
+        headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify({ Id : '2', profileImage : 'a', LastSeen : '2', password : 'x', username : 't', nickname : 'as' , chathistory : null}) });
     console.log(r);
     
