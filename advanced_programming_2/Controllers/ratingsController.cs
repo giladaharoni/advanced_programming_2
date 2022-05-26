@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using advanced_programming_2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using advanced_programming_2.Data;
-using advanced_programming_2.Models;
+using Repository;
 
 namespace advanced_programming_2.Controllers
 {

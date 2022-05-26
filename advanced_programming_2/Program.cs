@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using advanced_programming_2.Data;
+using Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<advanced_programming_2Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("advanced_programming_2Context") ?? throw new InvalidOperationException("Connection string 'advanced_programming_2Context' not found.")));

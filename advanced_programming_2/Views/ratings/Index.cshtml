@@ -16,7 +16,7 @@
 </p>
 <script>
 async function post() {
-    const r = await fetch('../api/Contacts',
+    const r = await fetch('https://localhost:7271/Contacts',
         { method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify({ Id : '2', profileImage : 'a', LastSeen : '2', password : 'x', username : 't', nickname : 'as' , chathistory : null}) });
