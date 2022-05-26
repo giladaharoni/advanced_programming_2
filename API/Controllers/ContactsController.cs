@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using advanced_programming_2.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace advanced_programming_2.Controllers
 {
@@ -14,6 +15,12 @@ namespace advanced_programming_2.Controllers
     [Route("[controller]")]
     public class ContactsController : ControllerBase
     {
+        public IConfiguration _configuration;
+
+        public ContactsController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = 1, profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D" } };
 
         // GET: Contacts
@@ -39,6 +46,7 @@ namespace advanced_programming_2.Controllers
         [HttpPost]
         public void Create([Bind("profileImage,LastSeen,password,username,nickname")] Contact contact)
         {
+           
             _contacts.Add(contact);
         }
 
