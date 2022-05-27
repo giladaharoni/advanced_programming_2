@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
                 ValidateAudience = true,
                 ValidAudience = builder.Configuration["JWTParams:Audience"],
                 ValidIssuer = builder.Configuration["JWTParams:Issuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTParams: secretKey"]))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTParams:secretKey"]))
             };
         });
 
@@ -48,7 +48,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseCors("Allow All");
+app.UseCors("Allow All");
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
