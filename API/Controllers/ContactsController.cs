@@ -86,6 +86,58 @@ namespace advanced_programming_2.Controllers
             else return null;
         }
 
+
+        [Route("{id?}/messages/{id2?}")]
+        [HttpGet]
+        public message GetMessage(string id, int id2)
+        {
+            var name = HttpContext.User.Claims.ToList()[3].Value;
+            var finds = _contacts.Find(e => e.username == name);
+            if (finds.chathistories == null)
+            {
+                finds.chathistories= new List<chathistory>();
+                return null;
+            }
+            var mchathistory = finds.chathistories.ToList();
+            var history = mchathistory.Find(e => e.contact.Id == id);
+            if (history != null)
+            {
+                var mess = history.Messages.Find(e => e.Id == id2);
+                if (mess != null)
+                {
+                    return mess;
+                }
+            }
+
+            return null;
+        }
+
+        [Route("{id?}/messages/{id2?}")]
+        [HttpPut]
+        public void updateMessage(string id, int id2, message message)
+        {
+            var mess = GetMessage(id, id2);
+            if (mess != null)
+            {
+                mess.sendTime = message.sendTime;
+                mess.isOneSend = message.isOneSend;
+                mess.content = message.content;
+            }
+        }
+
+        [Route("{id?}/messages/{id2?}")]
+        [HttpDelete]
+        public void deleteMessage(string id ,int id2)
+        {
+            if (GetMessage(id, id2) != null)
+            {
+                var name = HttpContext.User.Claims.ToList()[3].Value;
+                var finds = _contacts.Find(e => e.username == name);
+                finds.chathistories.ToList().Find(e => e.contact.Id==id).Messages.Remove(GetMessage(id,id2));
+
+            }
+        }
+
     }
 }
 
