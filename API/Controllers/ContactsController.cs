@@ -21,19 +21,21 @@ namespace advanced_programming_2.Controllers
         {
             _configuration = configuration;
         }
-        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = 1, profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D" } };
+        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = new List<Contact>(), chathistories = null }, };
 
         // GET: Contacts
         [HttpGet]
         public IEnumerable<Contact> index()
         {
-
-            return _contacts;
+            var name = HttpContext.User.Claims.ToList()[3].Value;
+            var finds = _contacts.Find(e => e.username==name);
+            return finds.Contacts;
+            //return _contacts;
         }
 
         [HttpGet("{id}")]
         // GET: Contacts/Details/5
-        public Contact Details(int? id)
+        public Contact Details(string id)
         {
 
 
@@ -45,10 +47,12 @@ namespace advanced_programming_2.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public void Create([Bind("profileImage,LastSeen,password,username,nickname")] Contact contact)
+        public void Create(string id, string name, string server)
         {
-           
-            _contacts.Add(contact);
+            var contact = _contacts.Find(e => e.Id == id);
+            var user = HttpContext.User.Claims.ToList()[3].Value;
+            var finds = _contacts.Find(e => e.username == user);
+            finds.Contacts.Add(contact);
         }
 
     }

@@ -2,13 +2,15 @@
 {
     public class Contact
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public virtual ICollection<Contact>? Contacts { get; set; }
         public string profileImage { get; set; }
 
         public DateTime? LastSeen { get; set; }
 
         public string password { get; set; }
+
+        public string server { get; set; }
 
         public string username { get; set; }
 
