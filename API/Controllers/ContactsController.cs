@@ -27,6 +27,7 @@ namespace advanced_programming_2.Controllers
         [HttpGet]
         public IEnumerable<Contact> index()
         {
+
             return _contacts;
         }
 

@@ -11,10 +11,12 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -49,12 +51,29 @@ namespace API.Controllers
                     expires: DateTime.UtcNow.AddMinutes(100),
                     signingCredentials: mac
                     );
+                
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
 
             }
         }
 
+        private async void Signin(string name)
+        {
+            var claims = new List<Claim>
+            { new Claim(ClaimTypes.Name,name)};
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(15)
+            };
 
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+
+        }
 
     }
 }
