@@ -21,7 +21,7 @@ namespace advanced_programming_2.Controllers
         {
             _configuration = configuration;
         }
-        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = new List<Contact>(), chathistories = null }, };
+        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = new List<Contact>(), chathistories = null  }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>(), chathistories = null }, };
 
         // GET: Contacts
         [HttpGet]
@@ -53,6 +53,14 @@ namespace advanced_programming_2.Controllers
             var user = HttpContext.User.Claims.ToList()[3].Value;
             var finds = _contacts.Find(e => e.username == user);
             finds.Contacts.Add(contact);
+        }
+
+        [HttpGet("{id}/messages")]
+        public List<message> Messages(string id)
+        {
+            var name = HttpContext.User.Claims.ToList()[3].Value;
+            var finds = _contacts.Find(e => e.username == name);
+            return finds.chathistories.ToList().Find(e => e.Contacts.Contains()
         }
 
     }
