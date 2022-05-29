@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
         //היסטוריית שיחות – הודעות, 2 אנשי קשר.
-        public ICollection<message> Messages { get; set; }
+        public List<message> Messages { get; set; }
 
-        public List<Contact> Contacts { get; set; }
+        public Contact contact { get; set; }
 
         
     }

@@ -9,5 +9,14 @@
         public string content { get; set; }
 
         public bool isOneSend { get; set; }
+
+        public message(string content, bool isOneSend)
+        {
+            this.content = content;
+            this.isOneSend = isOneSend;
+            sendTime = DateTime.Now;
+            Id = 2;
+        }
     }
+    
 }

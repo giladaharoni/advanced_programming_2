@@ -21,7 +21,7 @@ namespace advanced_programming_2.Controllers
         {
             _configuration = configuration;
         }
-        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = new List<Contact>(), chathistories = null  }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>(), chathistories = null }, };
+        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>(), chathistories = null }, };
 
         // GET: Contacts
         [HttpGet]
@@ -52,6 +52,10 @@ namespace advanced_programming_2.Controllers
             var contact = _contacts.Find(e => e.Id == id);
             var user = HttpContext.User.Claims.ToList()[3].Value;
             var finds = _contacts.Find(e => e.username == user);
+            if(finds.Contacts == null)
+            {
+                finds.Contacts = new List<Contact>();
+            }
             finds.Contacts.Add(contact);
         }
 
@@ -60,7 +64,26 @@ namespace advanced_programming_2.Controllers
         {
             var name = HttpContext.User.Claims.ToList()[3].Value;
             var finds = _contacts.Find(e => e.username == name);
-            return finds.chathistories.ToList().Find(e => e.Contacts.Contains()
+            if (finds.chathistories == null)
+            {
+                finds.chathistories = new List<chathistory>();
+                finds.chathistories.Add(new chathistory { Messages = new List<message>(), contact = _contacts[1], Id = 3 });
+            }
+            var mchathistory = finds.chathistories.ToList();
+            chathistory mcontact = null;
+            foreach (chathistory a in mchathistory.ToList())
+            {
+                if (a.contact.Id == id)
+                {
+                    mcontact = a;
+                }
+            }
+            if (mcontact != null)
+            {
+                return mcontact.Messages;
+
+            }
+            else return null;
         }
 
     }
