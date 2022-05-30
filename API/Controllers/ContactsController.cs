@@ -43,6 +43,7 @@ namespace advanced_programming_2.Controllers
         }
 
 
+
         // POST: Contacts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -86,6 +87,32 @@ namespace advanced_programming_2.Controllers
             else return null;
         }
 
+        [HttpPost("{id}/messages")]
+        public void Message(string id ,message message)
+        {
+            var name = HttpContext.User.Claims.ToList()[3].Value;
+            var firstuser = _contacts.Find(e => e.username == name);
+            var lastuser = _contacts.Find(e => e.Id == id);
+            firstuser.chathistories.ToList().Find(e => e.contact == lastuser).Messages.Add(message);
+            lastuser.chathistories.ToList().Find(e => e.contact == firstuser).Messages.Add(message);
+
+        }
+
+        [HttpDelete("{id}")]
+        // GET: Contacts/Details/5
+        public void deleteContact(string id)
+        {
+            var remcon = _contacts.Where(x => x.Id == id).FirstOrDefault();
+            foreach(Contact contact in _contacts)
+            {
+                if (contact.Contacts.Contains(remcon))
+                {
+                    contact.Contacts.Remove(remcon);
+                }
+            }
+            _contacts.Remove(remcon);
+        }
+
 
         [Route("{id?}/messages/{id2?}")]
         [HttpGet]
@@ -111,6 +138,8 @@ namespace advanced_programming_2.Controllers
 
             return null;
         }
+
+
 
         [Route("{id?}/messages/{id2?}")]
         [HttpPut]

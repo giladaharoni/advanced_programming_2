@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using advanced_programming_2.Hubs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repository;
 
@@ -8,6 +9,8 @@ builder.Services.AddDbContext<advanced_programming_2Context>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -26,4 +29,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=ratings}/{action=Search}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<myHub>("/myHub");
+});
 app.Run();
