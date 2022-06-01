@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using advanced_programming_2.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Domain;
 
 namespace advanced_programming_2.Controllers
 {
@@ -24,21 +25,39 @@ namespace advanced_programming_2.Controllers
         private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>() { new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "dodi", nickname = "D", Contacts = null, chathistories = null } }, chathistories = null } };
         // GET: Contacts
         [HttpGet]
-        public IEnumerable<Contact> index()
+        public List<viewContact> index()
         {
             var name = HttpContext.User.Claims.ToList()[3].Value;
             var finds = _contacts.Find(e => e.username==name);
-            return finds.Contacts;
-            //return _contacts;
+            List<viewContact> contactViewList = new List<viewContact>();
+            foreach (var contact in finds.Contacts)
+            {
+                
+                    if (finds.chathistories != null)
+                    {
+                        if (finds.chathistories.ToList().Find(k => k.contact == contact).Messages != null)
+                            contactViewList.Add(new viewContact(contact) { last = finds.chathistories.ToList().Find(k => k.contact == contact).Messages.ToList().Last().content });
+                        else
+                            contactViewList.Add(new viewContact(contact));
+                    }
+                    else
+                        contactViewList.Add(new viewContact(contact));
+                
+            }
+            return contactViewList;
         }
 
         [HttpGet("{id}")]
         // GET: Contacts/Details/5
-        public Contact Details(string id)
+        public viewContact Details(string id)
         {
+            var name = HttpContext.User.Claims.ToList()[3].Value;
+            var finds = _contacts.Find(e => e.username == name);
+            Contact contact = finds.Contacts.Where(x => x.Id == id).FirstOrDefault();
+          
+           var view = new viewContact(contact) { last = finds.chathistories.ToList().Find(k => k.contact == contact).Messages.ToList().Last().content };
 
-
-            return _contacts.Where(x => x.Id == id).FirstOrDefault();
+            return view;
         }
 
 
@@ -47,23 +66,23 @@ namespace advanced_programming_2.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public void Create(string id, string name, string server)
+
+        public void Create([Bind("id,name,server")] contactPost conta)
         {
-            var contact = _contacts.Find(e => e.Id == id);
+            var contact = _contacts.Find(e => e.Id == conta.id);
             var user = HttpContext.User.Claims.ToList()[3].Value;
             var finds = _contacts.Find(e => e.username == user);
             if(finds.Contacts == null)
             {
                 finds.Contacts = new List<Contact>();
             }
-            if(contact != null)
+            if (contact != null)
             {
                 if (contact.Id != finds.Id)
                 {
                     finds.Contacts.Add(contact);
                 }
             }
-            
         }
 
         [HttpGet("{id}/messages")]
