@@ -56,11 +56,14 @@ namespace advanced_programming_2.Controllers
             {
                 finds.Contacts = new List<Contact>();
             }
-
-            if (contact.Id != finds.Id)
+            if(contact != null)
             {
-                finds.Contacts.Add(contact);
+                if (contact.Id != finds.Id)
+                {
+                    finds.Contacts.Add(contact);
+                }
             }
+            
         }
 
         [HttpGet("{id}/messages")]
