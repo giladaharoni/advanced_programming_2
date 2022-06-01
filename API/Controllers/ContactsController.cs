@@ -35,7 +35,7 @@ namespace advanced_programming_2.Controllers
                 
                     if (finds.chathistories != null)
                     {
-                        if (finds.chathistories.ToList().Find(k => k.contact == contact).Messages != null)
+                        if (finds.chathistories.ToList().Find(k => k.contact == contact)?.Messages != null)
                             contactViewList.Add(new viewContact(contact) { last = finds.chathistories.ToList().Find(k => k.contact == contact).Messages.ToList().Last().content });
                         else
                             contactViewList.Add(new viewContact(contact));
