@@ -21,8 +21,7 @@ namespace advanced_programming_2.Controllers
         {
             _configuration = configuration;
         }
-        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>(), chathistories = null }, };
-
+        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>() { new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "dodi", nickname = "D", Contacts = null, chathistories = null } }, chathistories = null } };
         // GET: Contacts
         [HttpGet]
         public IEnumerable<Contact> index()
@@ -57,7 +56,11 @@ namespace advanced_programming_2.Controllers
             {
                 finds.Contacts = new List<Contact>();
             }
-            finds.Contacts.Add(contact);
+
+            if (contact.Id != finds.Id)
+            {
+                finds.Contacts.Add(contact);
+            }
         }
 
         [HttpGet("{id}/messages")]
