@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    internal class messageView
+    public class messageView
     {
         public int id { get; set; }
         public DateTime created { get; set; }

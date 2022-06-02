@@ -22,7 +22,7 @@ namespace advanced_programming_2.Controllers
         {
             _configuration = configuration;
         }
-        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>() { new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "dodi", nickname = "D", Contacts = null, chathistories = null } }, chathistories = null } };
+        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>() , chathistories = null } , new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "dodi", nickname = "D", Contacts = null, chathistories = null } };
         // GET: Contacts
         [HttpGet]
         public List<viewContact> index()
@@ -113,14 +113,28 @@ namespace advanced_programming_2.Controllers
         }
 
         [HttpPost("{id}/messages")]
-        public void Message(string id ,message message)
+        public void Message(string id ,messagePost messageP)
         {
             var name = HttpContext.User.Claims.ToList()[3].Value;
             var firstuser = _contacts.Find(e => e.username == name);
             var lastuser = _contacts.Find(e => e.Id == id);
-            firstuser.chathistories.ToList().Find(e => e.contact == lastuser).Messages.Add(message);
-            lastuser.chathistories.ToList().Find(e => e.contact == firstuser).Messages.Add(message);
-
+            var myMessage = new message(messageP.content, true);
+            var hisMessage = new message(messageP.content, false);
+            if (firstuser.chathistories == null)
+            {
+                firstuser.chathistories = new List<chathistory>() { new chathistory() { contact = lastuser, Id = myMessage.Id, Messages = new List<message>() { myMessage } } };
+                lastuser.chathistories = new List<chathistory>() { new chathistory() { contact = firstuser, Id = hisMessage.Id, Messages = new List<message>() { hisMessage } } };
+            }
+            else
+            {
+                if(firstuser.chathistories.ToList().Find(e => e.contact == lastuser).Messages == null)
+                {
+                    firstuser.chathistories.ToList().Find(e => e.contact == lastuser).Messages = new List<message>();
+                }
+                firstuser.chathistories.ToList().Find(e => e.contact == lastuser).Messages.Add(myMessage);
+                lastuser.chathistories.ToList().Find(e => e.contact == firstuser).Messages.Add(hisMessage);
+                
+            }
         }
 
         [HttpDelete("{id}")]

@@ -2,6 +2,8 @@
 {
     public class message
     {
+        public static int counter=0;
+
         //שעה, תוכן, מי שלח, מי קיבל.
         public int Id { get; set; }
         public DateTime sendTime { get; set; }
@@ -15,7 +17,7 @@
             this.content = content;
             this.isOneSend = isOneSend;
             sendTime = DateTime.Now;
-            Id = 2;
+            Id = ++counter;
         }
     }
     

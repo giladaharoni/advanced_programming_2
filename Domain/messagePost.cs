@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    internal class messagePost
+    public class messagePost
     {
         public string content { get; set; }
     }
