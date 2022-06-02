@@ -54,8 +54,12 @@ namespace advanced_programming_2.Controllers
             var name = HttpContext.User.Claims.ToList()[3].Value;
             var finds = _contacts.Find(e => e.username == name);
             Contact contact = finds.Contacts.Where(x => x.Id == id).FirstOrDefault();
+            if (contact == null)
+            {
+                return null;
+            }
           
-           var view = new viewContact(contact) { last = finds.chathistories.ToList().Find(k => k.contact == contact).Messages.ToList().Last().content };
+           var view = new viewContact(contact) { last = finds?.chathistories?.ToList()?.Find(k => k.contact == contact)?.Messages?.ToList()?.Last()?.content };
 
             return view;
         }
@@ -115,41 +119,69 @@ namespace advanced_programming_2.Controllers
         [HttpPost("{id}/messages")]
         public void Message(string id ,messagePost messageP)
         {
+            //find the user connected
             var name = HttpContext.User.Claims.ToList()[3].Value;
             var firstuser = _contacts.Find(e => e.username == name);
+            //find the reciever
             var lastuser = _contacts.Find(e => e.Id == id);
             var myMessage = new message(messageP.content, true);
             var hisMessage = new message(messageP.content, false);
             if (firstuser.chathistories == null)
             {
                 firstuser.chathistories = new List<chathistory>() { new chathistory() { contact = lastuser, Id = myMessage.Id, Messages = new List<message>() { myMessage } } };
-                lastuser.chathistories = new List<chathistory>() { new chathistory() { contact = firstuser, Id = hisMessage.Id, Messages = new List<message>() { hisMessage } } };
-            }
-            else
+            } else
             {
-                if(firstuser.chathistories.ToList().Find(e => e.contact == lastuser).Messages == null)
+                var histo = firstuser.chathistories.ToList().Find(e => e.contact == lastuser);
+                if (histo != null)
                 {
-                    firstuser.chathistories.ToList().Find(e => e.contact == lastuser).Messages = new List<message>();
+                    if (histo.Messages != null)
+                    {
+                        histo.Messages.Add(myMessage);
+                    } else
+                    {
+                        histo.Messages = new List<message> { myMessage };
+                    }
+                } else
+                {
+                    firstuser.chathistories.Add(new chathistory() { contact = lastuser, Id = myMessage.Id, Messages = new List<message> { myMessage } });
                 }
-                firstuser.chathistories.ToList().Find(e => e.contact == lastuser).Messages.Add(myMessage);
-                lastuser.chathistories.ToList().Find(e => e.contact == firstuser).Messages.Add(hisMessage);
-                
             }
+            if (lastuser.chathistories == null)
+            {
+                lastuser.chathistories = new List<chathistory>() { new chathistory() { contact = firstuser, Id = hisMessage.Id, Messages = new List<message>() { hisMessage } } };
+            } else
+            {
+                var chahist = lastuser.chathistories.ToList().Find(e=>e.contact == firstuser);
+                if (chahist != null)
+                {
+                    chahist.Messages.Add(hisMessage);
+                }
+                else
+                {
+                    lastuser.chathistories.Add(new chathistory() { Messages = new List<message> { hisMessage },contact=firstuser,Id=hisMessage.Id });
+                }
+            }
+            
         }
 
         [HttpDelete("{id}")]
         // GET: Contacts/Details/5
         public void deleteContact(string id)
         {
+            var name = HttpContext.User.Claims.ToList()[3].Value;
+            var firstuser = _contacts.Find(e => e.username == name);
             var remcon = _contacts.Where(x => x.Id == id).FirstOrDefault();
-            foreach(Contact contact in _contacts)
+            if (firstuser.Contacts != null)
             {
-                if (contact.Contacts.Contains(remcon))
+                firstuser.Contacts.Remove(remcon);
+                var chat = firstuser.chathistories?.ToList()?.Find(e => e.contact == remcon);
+                if (chat != null)
                 {
-                    contact.Contacts.Remove(remcon);
+                    firstuser.chathistories.Remove(chat);
                 }
             }
-            _contacts.Remove(remcon);
+
+
         }
 
 
@@ -182,13 +214,11 @@ namespace advanced_programming_2.Controllers
 
         [Route("{id?}/messages/{id2?}")]
         [HttpPut]
-        public void updateMessage(string id, int id2, message message)
+        public void updateMessage(string id, int id2, messagePost message)
         {
             var mess = GetMessage(id, id2);
             if (mess != null)
             {
-                mess.sendTime = message.sendTime;
-                mess.isOneSend = message.isOneSend;
                 mess.content = message.content;
             }
         }
@@ -202,6 +232,7 @@ namespace advanced_programming_2.Controllers
                 var name = HttpContext.User.Claims.ToList()[3].Value;
                 var finds = _contacts.Find(e => e.username == name);
                 finds.chathistories.ToList().Find(e => e.contact.Id==id).Messages.Remove(GetMessage(id,id2));
+              
 
             }
         }
