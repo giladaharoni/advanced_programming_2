@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using advanced_programming_2.Controllers;
 
 namespace API.Controllers
 {
@@ -32,7 +33,7 @@ namespace API.Controllers
         public IActionResult Post(string username, string password)
         {
             ///need to validate the user name.
-            if (true)
+            if (ContactsController.Login(username,password))
             {
                 var claims = new[]
                 {
@@ -55,8 +56,19 @@ namespace API.Controllers
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
 
             }
+            return BadRequest();
         }
 
+
+        [HttpPost("/register")]
+        public IActionResult Register(string username, string nickname, string password)
+        {
+            if (ContactsController.register(username, nickname, password)){
+                return Post(username, password);
+            }
+            return BadRequest();
+           
+        }
         private async void Signin(string name)
         {
             var claims = new List<Claim>

@@ -22,7 +22,7 @@ namespace advanced_programming_2.Controllers
         {
             _configuration = configuration;
         }
-        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "do", nickname = "o", Contacts = new List<Contact>() , chathistories = null } , new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "dodi", nickname = "D", Contacts = null, chathistories = null } };
+        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "do", nickname = "o", Contacts = new List<Contact>() , chathistories = null } , new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "dodi", nickname = "D", Contacts = null, chathistories = null } };
         // GET: Contacts
         [HttpGet]
         public List<viewContact> index()
@@ -64,7 +64,23 @@ namespace advanced_programming_2.Controllers
             return view;
         }
 
+        public static bool Login(string username, string password)
+        {
+            if (_contacts.Find(e => e.password == password && e.username == username) != null) { return true; }
+            return false;
+            
+        }
 
+        public static bool register(string username,string nickname, string password)
+        {
+            if (Login(username, password))
+            {
+                return false;
+            }
+            _contacts.Add(new Contact() { username = username, password = password, nickname = nickname, Id = username.ToLower() });
+            return true;
+
+        }
 
         // POST: Contacts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
