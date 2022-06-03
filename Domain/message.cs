@@ -6,17 +6,17 @@
 
         //שעה, תוכן, מי שלח, מי קיבל.
         public int Id { get; set; }
-        public DateTime sendTime { get; set; }
+        public DateTime created { get; set; }
 
         public string content { get; set; }
 
-        public bool isOneSend { get; set; }
+        public bool sent { get; set; }
 
         public message(string content, bool isOneSend)
         {
             this.content = content;
-            this.isOneSend = isOneSend;
-            sendTime = DateTime.Now;
+            this.sent = isOneSend;
+            created = DateTime.Now;
             Id = ++counter;
         }
     }

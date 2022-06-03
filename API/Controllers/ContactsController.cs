@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Domain;
 
+
 namespace advanced_programming_2.Controllers
 {
     [Authorize]
@@ -16,13 +17,18 @@ namespace advanced_programming_2.Controllers
     [Route("[controller]")]
     public class ContactsController : ControllerBase
     {
+        static int counter = 20;
+
         public IConfiguration _configuration;
 
         public ContactsController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-        private static List<Contact> _contacts = new List<Contact>() { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "didi", nickname = "D", Contacts = null, chathistories = null }, new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "do", nickname = "o", Contacts = new List<Contact>() , chathistories = null } , new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "12341234", username = "dodi", nickname = "D", Contacts = null, chathistories = null } };
+        private static List<Contact> _contacts = new List<Contact>()
+        { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "do", nickname = "didi", Contacts = new List<Contact>() , chathistories = null } ,
+            new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dodi", nickname = "dodi", Contacts = new List<Contact>() , chathistories = null } ,
+            new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dori", nickname = "dori", Contacts = new List<Contact>() , chathistories = null } };
         // GET: Contacts
         [HttpGet]
         public List<viewContact> index()
@@ -77,7 +83,12 @@ namespace advanced_programming_2.Controllers
             {
                 return false;
             }
-            _contacts.Add(new Contact() { username = username, password = password, nickname = nickname, Id = username.ToLower() });
+            Contact contact = (new Contact() { username = username, password = password, nickname = nickname, Id = counter.ToString() });
+            counter++;
+            contact.chathistories = new List<chathistory>();
+            contact.Contacts = new List<Contact>();
+            _contacts.Add(contact);
+            
             return true;
 
         }
@@ -101,6 +112,7 @@ namespace advanced_programming_2.Controllers
                 if (contact.Id != finds.Id)
                 {
                     finds.Contacts.Add(contact);
+                    contact.Contacts.Add(finds);
                 }
             }
         }
