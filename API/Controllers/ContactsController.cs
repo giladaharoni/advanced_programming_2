@@ -26,9 +26,9 @@ namespace advanced_programming_2.Controllers
             _configuration = configuration;
         }
         private static List<Contact> _contacts = new List<Contact>()
-        { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "do", nickname = "didi", Contacts = new List<Contact>() , chathistories = null } ,
-            new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dodi", nickname = "dodi", Contacts = new List<Contact>() , chathistories = null } ,
-            new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dori", nickname = "dori", Contacts = new List<Contact>() , chathistories = null } };
+        { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "do", nickname = "didi", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } ,
+            new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dodi", nickname = "dodi", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } ,
+            new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dori", nickname = "dori", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } };
         // GET: Contacts
         [HttpGet]
         public List<viewContact> index()
@@ -150,6 +150,7 @@ namespace advanced_programming_2.Controllers
             //find the user connected
             var name = HttpContext.User.Claims.ToList()[3].Value;
             var firstuser = _contacts.Find(e => e.username == name);
+            firstuser.LastSeen = DateTime.Now;
             //find the reciever
             var lastuser = _contacts.Find(e => e.Id == id);
             var myMessage = new message(messageP.content, true);
