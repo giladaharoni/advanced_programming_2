@@ -34,8 +34,7 @@ namespace advanced_programming_2.Controllers
         {
 
 
-            return _context.rating != null ? View(await _context.rating.ToListAsync()) :
-                        Problem("Entity set 'advanced_programming_2Context.rating'  is null.");
+            return View(await _context.rating.ToListAsync());
         }
 
         [HttpPost]

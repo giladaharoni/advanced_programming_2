@@ -19,6 +19,14 @@
             created = DateTime.Now;
             Id = ++counter;
         }
+
+        public message(int id, DateTime created, string content, bool sent)
+        {
+            Id = id;
+            this.created = created;
+            this.content = content;
+            this.sent = sent;
+        }
     }
     
 }
