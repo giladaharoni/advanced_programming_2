@@ -26,9 +26,9 @@ namespace advanced_programming_2.Controllers
             _configuration = configuration;
         }
         private static List<Contact> _contacts = new List<Contact>()
-        { new Contact() { Id = "1", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "do", nickname = "didi", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } ,
-            new Contact() { Id = "2", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dodi", nickname = "dodi", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } ,
-            new Contact() { Id = "3", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dori", nickname = "dori", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } };
+        { new Contact() { Id = "do@gmail.com", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "do", nickname = "didi", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } ,
+            new Contact() { Id = "dodi@gmail.com", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dodi", nickname = "dodi", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } ,
+            new Contact() { Id = "dori@gmail.com", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dori", nickname = "dori", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } };
         // GET: Contacts
         [HttpGet]
         public List<viewContact> index()
@@ -106,6 +106,9 @@ namespace advanced_programming_2.Controllers
             if(finds.Contacts == null)
             {
                 finds.Contacts = new List<Contact>();
+            }
+            if (finds.Contacts.Contains(contact)) {
+                return;
             }
             if (contact != null)
             {
