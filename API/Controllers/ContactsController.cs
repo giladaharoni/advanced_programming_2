@@ -83,7 +83,7 @@ namespace advanced_programming_2.Controllers
             {
                 return false;
             }
-            Contact contact = (new Contact() { username = username, password = password, nickname = nickname, Id = counter.ToString() });
+            Contact contact = (new Contact() { username = username, password = password, nickname = nickname, Id = username });
             counter++;
             contact.chathistories = new List<chathistory>();
             contact.Contacts = new List<Contact>();
