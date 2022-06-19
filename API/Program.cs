@@ -94,7 +94,7 @@ app.UseCors("Allow All");
 //app.UseCors("ClientPermission");
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 
 app.MapControllers();
