@@ -18,9 +18,9 @@ you need to run 3 parts of the project together:
   
   do, dori, dodi.
   
-  they have the id's 1,2,3, respectively.
+  they have the mail's do@gmail.com,dori@gmail.com,dodi@gmail.com, respectively.
   
   they all have the same password: 1.
   
-  you can also register and create new user.
+  you can also register and create new user. and add him by the mail. you can't create 2 different contracts with the same mail.
   
