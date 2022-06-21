@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     [ApiController]
     public class InvitationsController : ControllerBase

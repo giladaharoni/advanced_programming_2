@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using advanced_programming_2.Controllers;
+using Domain;
 
 namespace API.Controllers
 {
@@ -23,6 +24,7 @@ namespace API.Controllers
     public class UserController : ControllerBase
     {
         public IConfiguration _configuration;
+        static string token;
 
         public UserController(IConfiguration configuration)
         {
@@ -57,6 +59,37 @@ namespace API.Controllers
 
             }
             return BadRequest();
+        }
+
+        [HttpGet("/string")]
+        public response post1(string username, string password)
+        {
+            ///need to validate the user name.
+            if (ContactsController.Login(username, password))
+            {
+                var claims = new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, _configuration["JWTParams:Subject"]),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                    new Claim("userId",username)
+                };
+
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:secretKey"]));
+                var mac = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                var token = new JwtSecurityToken(
+                    _configuration["JWTParams:Issuer"],
+                    _configuration["JWTParams:Audience"],
+                    claims,
+                    expires: DateTime.UtcNow.AddMinutes(100),
+                    signingCredentials: mac
+                    );
+                
+
+                return new response { Token = new JwtSecurityTokenHandler().WriteToken(token) };
+
+            }
+            return new response { Token = "ERROR" }; ;
         }
 
 
