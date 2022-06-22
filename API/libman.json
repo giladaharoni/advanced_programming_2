@@ -9,6 +9,10 @@
         "dist/browser/signalr.js",
         "dist/browser/signalr.min.js"
       ]
+    },
+    {
+      "library": "firebase-admin@11.0.0",
+      "destination": "lib/firebase-admin/"
     }
   ]
 }

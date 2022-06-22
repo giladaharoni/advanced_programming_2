@@ -102,6 +102,17 @@ namespace API.Controllers
             return BadRequest();
            
         }
+
+        [HttpGet("/registerwithlogin")]
+        public response RegisterVar(string username, string nickname, string password)
+        {
+            if (ContactsController.register(username, nickname, password))
+            {
+                return post1(username, password);
+            }
+            return new response { Token = "ERROR" };
+
+        }
         private async void Signin(string name)
         {
             var claims = new List<Claim>

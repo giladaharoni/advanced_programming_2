@@ -8,7 +8,9 @@ using advanced_programming_2.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Domain;
-
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using FirebaseAdmin.Messaging;
 
 namespace advanced_programming_2.Controllers
 {
@@ -29,6 +31,8 @@ namespace advanced_programming_2.Controllers
         { new Contact() { Id = "do@gmail.com", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "do", nickname = "didi", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } ,
             new Contact() { Id = "dodi@gmail.com", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dodi", nickname = "dodi", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } ,
             new Contact() { Id = "dori@gmail.com", profileImage = null, LastSeen = DateTime.Now, password = "1", username = "dori", nickname = "dori", Contacts = new List<Contact>() , chathistories = new List<chathistory>() } };
+
+        private static List<String> Tokens = new List<string>();
         // GET: Contacts
         [HttpGet]
         public List<viewContact> index()
@@ -98,7 +102,7 @@ namespace advanced_programming_2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 
-        public void Create([Bind("id,name,server")] contactPost conta)
+        public async void Create([Bind("id,name,server")] contactPost conta)
         {
             var contact = _contacts.Find(e => e.Id == conta.id);
             var user = HttpContext.User.Claims.ToList()[3].Value;
@@ -118,6 +122,18 @@ namespace advanced_programming_2.Controllers
                     contact.Contacts.Add(finds);
                 }
             }
+            FirebaseApp.Create(
+                new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile("private_key.json")
+                });
+            var m = new MulticastMessage()
+            {
+                Tokens = Tokens,
+                Data = new Dictionary<String, String>() { { "1", "1" } }
+            };
+            await FirebaseMessaging.DefaultInstance.SendMulticastAsync(m);
+
         }
 
         [HttpGet("{id}/messages")]
@@ -148,7 +164,7 @@ namespace advanced_programming_2.Controllers
         }
 
         [HttpPost("{id}/messages")]
-        public void Message(string id ,messagePost messageP)
+        public async Task MessageAsync(string id ,messagePost messageP)
         {
             //find the user connected
             var name = HttpContext.User.Claims.ToList()[3].Value;
@@ -193,7 +209,19 @@ namespace advanced_programming_2.Controllers
                     lastuser.chathistories.Add(new chathistory() { Messages = new List<message> { hisMessage },contact=firstuser,Id=hisMessage.Id });
                 }
             }
-            
+
+            FirebaseApp.Create(
+            new AppOptions()
+            {
+            Credential = GoogleCredential.FromFile("private_key.json")
+            });
+            var m = new MulticastMessage()
+            {
+                Tokens = Tokens,
+                Data = new Dictionary<String, String>() { { "1", "1" } }
+            };
+            await FirebaseMessaging.DefaultInstance.SendMulticastAsync(m);
+
         }
 
         [HttpDelete("{id}")]
