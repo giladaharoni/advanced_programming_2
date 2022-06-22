@@ -97,12 +97,16 @@ namespace advanced_programming_2.Controllers
 
         }
 
+        public static void addToken(string token)
+        {
+            Tokens.Add(token);
+        }
         // POST: Contacts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 
-        public async void Create([Bind("id,name,server")] contactPost conta)
+        public void Create([Bind("id,name,server")] contactPost conta)
         {
             var contact = _contacts.Find(e => e.Id == conta.id);
             var user = HttpContext.User.Claims.ToList()[3].Value;
@@ -122,17 +126,17 @@ namespace advanced_programming_2.Controllers
                     contact.Contacts.Add(finds);
                 }
             }
-            FirebaseApp.Create(
-                new AppOptions()
-                {
-                    Credential = GoogleCredential.FromFile("private_key.json")
-                });
-            var m = new MulticastMessage()
-            {
-                Tokens = Tokens,
-                Data = new Dictionary<String, String>() { { "1", "1" } }
-            };
-            await FirebaseMessaging.DefaultInstance.SendMulticastAsync(m);
+        //    FirebaseApp.Create(
+      //          new AppOptions()
+    //            {
+      //              Credential = GoogleCredential.FromFile("private_key.json")
+        //        });
+          //  var m = new MulticastMessage()
+            //{
+              //  Tokens = Tokens,
+                //Data = new Dictionary<String, String>() { { "1", "1" } }
+            //};
+          //  await FirebaseMessaging.DefaultInstance.SendMulticastAsync(m);
 
         }
 

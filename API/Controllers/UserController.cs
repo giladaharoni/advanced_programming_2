@@ -62,11 +62,12 @@ namespace API.Controllers
         }
 
         [HttpGet("/string")]
-        public response post1(string username, string password)
+        public response post1(string username, string password, string token1)
         {
             ///need to validate the user name.
             if (ContactsController.Login(username, password))
             {
+                ContactsController.addToken(token1);
                 var claims = new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, _configuration["JWTParams:Subject"]),
@@ -104,11 +105,11 @@ namespace API.Controllers
         }
 
         [HttpGet("/registerwithlogin")]
-        public response RegisterVar(string username, string nickname, string password)
+        public response RegisterVar(string username, string nickname, string password,string token)
         {
             if (ContactsController.register(username, nickname, password))
             {
-                return post1(username, password);
+                return post1(username, password,token);
             }
             return new response { Token = "ERROR" };
 
