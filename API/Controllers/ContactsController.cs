@@ -74,6 +74,8 @@ namespace advanced_programming_2.Controllers
             return view;
         }
 
+        private static FirebaseApp a = null;
+
         public static bool Login(string username, string password)
         {
             if (_contacts.Find(e => e.password == password && e.username == username) != null) { return true; }
@@ -168,7 +170,7 @@ namespace advanced_programming_2.Controllers
         }
 
         [HttpPost("{id}/messages")]
-        public async Task MessageAsync(string id ,messagePost messageP)
+        public void MessageAsync(string id ,messagePost messageP)
         {
             //find the user connected
             var name = HttpContext.User.Claims.ToList()[3].Value;
@@ -214,17 +216,22 @@ namespace advanced_programming_2.Controllers
                 }
             }
 
-            FirebaseApp.Create(
-            new AppOptions()
+            if (a == null)
             {
-            Credential = GoogleCredential.FromFile("private_key.json")
-            });
+                a = FirebaseApp.Create(
+                new AppOptions()
+           {
+               Credential = GoogleCredential.FromFile("./Controllers/private_key.json")
+           });
+            }
+
+           
             var m = new MulticastMessage()
             {
                 Tokens = Tokens,
                 Data = new Dictionary<String, String>() { { "1", "1" } }
             };
-            await FirebaseMessaging.DefaultInstance.SendMulticastAsync(m);
+            FirebaseMessaging.DefaultInstance.SendMulticastAsync(m);
 
         }
 
